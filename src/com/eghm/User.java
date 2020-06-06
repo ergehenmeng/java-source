@@ -1,8 +1,8 @@
 package com.eghm;
 
-public interface User {
+public class User extends ZookeeperTest {
 
-    void doSomething();
+    void doSomething(){
 
-    String say();
+    }
 }

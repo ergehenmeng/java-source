@@ -5,7 +5,7 @@ import java.util.concurrent.CyclicBarrier;
 
 public class CyclicBarrierTest {
     public static void main(String[] args) throws InterruptedException {
-        CyclicBarrier barrier = new CyclicBarrier(5, new Runnable() {
+        CyclicBarrier barrier = new CyclicBarrier(3, new Runnable() {
             @Override
             public void run() {
                 System.out.println("Action...GO again!");
@@ -27,10 +27,8 @@ public class CyclicBarrierTest {
         @Override
         public void run() {
             try {
-                for (int i = 0; i < 3; i++) {
-                    System.out.println( Thread.currentThread().getName() + " Executed!");
-                    barrier.await();
-                }
+                barrier.await();
+                System.out.println( Thread.currentThread().getName() + " Executed!");
             } catch (BrokenBarrierException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
