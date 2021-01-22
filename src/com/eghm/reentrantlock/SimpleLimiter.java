@@ -8,13 +8,25 @@ import java.util.concurrent.TimeUnit;
  */
 
 class SimpleLimiter {
-    //当前令牌桶中的令牌数量
+
+    /**
+     * 当前令牌桶中的令牌数量
+     */
     long storedPermits = 0;
-    //令牌桶的容量
+
+    /**
+     * 令牌桶的容量
+     */
     long maxPermits = 3;
-    //下一令牌产生时间
+
+    /**
+     * 下一令牌产生时间
+     */
     long next = System.nanoTime();
-    //发放令牌间隔：纳秒
+
+    /**
+     * 发放令牌间隔：纳秒
+     */
     long interval = 1000_000_000;
 
     /**
@@ -24,12 +36,12 @@ class SimpleLimiter {
      */
     void resync(long now) {
         if (now > next) {
-            //新产生的令牌数 此处计算距离上次获取令牌时,可能已经产生了多个令牌
+            // 新产生的令牌数 此处计算距离上次获取令牌时,可能已经产生了多个令牌
             long newPermits=(now-next)/interval;
-            //新令牌增加到令牌桶, 以桶最大容量为上限
+            // 新令牌增加到令牌桶, 以桶最大容量为上限
             storedPermits= Math.min(maxPermits,
                     storedPermits + newPermits);
-            //将下一个令牌发放时间重置为当前时间
+            // 将下一个令牌发放时间重置为当前时间
             next = now;
         }
     }
@@ -39,16 +51,16 @@ class SimpleLimiter {
      */
     synchronized long reserve(long now){
         resync(now);
-        //能够获取令牌的时间
+        // 能够获取令牌的时间
         long at = next;
-        //令牌桶中能提供的令牌, 此时如果桶中令牌数为零 storedPermits=0 则fb=0
+        // 令牌桶中能提供的令牌, 此时如果桶中令牌数为零 storedPermits=0 则fb=0
         long fb= Math.min(1, storedPermits);
-        //令牌净需求 nr 如果等于1 表示桶里没令牌了 表示直接预约的next时间点的令牌, 下次产生令牌时间(相当于下下次) next+ 1* interval,
+        // 令牌净需求 nr 如果等于1 表示桶里没令牌了 表示直接预约的next时间点的令牌, 下次产生令牌时间(相当于下下次) next+ 1* interval,
         // nr 等于零,表示桶中有令牌不需要预约,next时间不变
         long nr = 1 - fb;
-        //重新计算下一令牌产生时间
+        // 重新计算下一令牌产生时间
         next = next + nr*interval;
-        //重新计算令牌桶中的令牌
+        // 重新计算令牌桶中的令牌
         this.storedPermits -= fb;
         return at;
     }
@@ -57,12 +69,12 @@ class SimpleLimiter {
      * 申请令牌
      */
     void acquire() {
-        //申请令牌时的时间
+        // 申请令牌时的时间
         long now = System.nanoTime();
-        //预占令牌
+        // 预占令牌
         long at=reserve(now);
         long waitTime=Math.max(at-now, 0);
-        //按照条件等待
+        // 按照条件等待
         if(waitTime > 0) {
             try {
                 TimeUnit.NANOSECONDS
