@@ -58,8 +58,10 @@ public class HttpClient {
             errorCallback.accept(wrapper);
             return;
         }
-        // TODO 通用错误码提示
-        System.out.println(wrapper.getMsg());
+        if (wrapper.getCode() != SUCCESS) {
+            // TODO 通用错误码提示
+            System.out.println(wrapper.getMsg());
+        }
     }
 
     /**
