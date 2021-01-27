@@ -6,6 +6,9 @@ package com.eghm.callback;
  */
 public class RespWrapper<T> extends Wrapper {
 
+    /**
+     * 响应信息
+     */
     private T data;
 
     public T getData() {

@@ -13,4 +13,11 @@ public interface Callback<T> {
     default void onData(T data) {
     }
 
+    /**
+     * 默认方式
+     * @return 默认回调
+     */
+    static Callback<Void> identity() {
+        return new Callback<Void>() {};
+    }
 }

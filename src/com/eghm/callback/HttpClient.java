@@ -17,12 +17,9 @@ public class HttpClient {
      * 后台返回的数据
      */
     private String response = "{\n" +
-            "    \"msg\": \"SUCCx\",\n" +
-            "    \"code\": \"100\",\n" +
-            "    \"data\": {\n" +
-            "        \"schoolId\": \"1196713856013959211\",\n" +
-            "        \"schoolName\": \"四川大学\"\n" +
-            "    }\n" +
+            "    \"msg\": \"success\",\n" +
+            "    \"code\": \"200\",\n" +
+            "    \"data\": null\n" +
             "}";
 
     /**
@@ -31,38 +28,34 @@ public class HttpClient {
     private static final int SUCCESS = 200;
 
     public void register() {
-        this.register(null, null, null);
+        this.register(Callback.identity(), null, null);
     }
 
     public <T> void register(Callback<T> callback) {
         this.register(callback, null, null);
     }
 
-    public <T> void register(Callback<T> callback, Integer code, ErrorCallback errorCallback) {
-        if (callback == null) {
-            Wrapper wrapper = gson.fromJson(response, Wrapper.class);
-            this.doParseError(wrapper, code, errorCallback);
-        } else {
-            RespWrapper<T> wrapper = gson.fromJson(response, new ParameterizedTypeImpl(RespWrapper.class, new Type[]{this.getGenericType(callback.getClass())}));
-            if (wrapper.getCode() == SUCCESS) {
-                callback.onData(wrapper.getData());
-            } else {
-                this.doParseError(wrapper, code, errorCallback);
-            }
-        }
+    public <T> void register(Integer code, ErrorCallback error) {
+        this.register(Callback.identity(), code, error);
     }
 
-    private void doParseError(Wrapper wrapper, Integer code, ErrorCallback errorCallback) {
-        // 自定义错误码处理逻辑
-        if (wrapper.getCode().equals(code) && errorCallback != null) {
-            errorCallback.accept(wrapper);
+    public <T> void register(Callback<T> success, Integer code, ErrorCallback error) {
+        RespWrapper<T> wrapper = gson.fromJson(response, new ParameterizedTypeImpl(RespWrapper.class, new Type[]{this.getGenericType(success.getClass())}));
+        // 成功
+        if (wrapper.getCode() == SUCCESS) {
+            success.onData(wrapper.getData());
             return;
         }
-        if (wrapper.getCode() != SUCCESS) {
-            // TODO 通用错误码提示
-            System.out.println(wrapper.getMsg());
+        // 自定义错误
+        if (wrapper.getCode().equals(code) && error != null) {
+            error.accept(wrapper);
+            return;
         }
+        // 通用错误
+        System.out.println(wrapper.getMsg());
     }
+
+
 
     /**
      * 解析泛型参数
