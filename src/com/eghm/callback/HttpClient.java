@@ -31,12 +31,12 @@ public class HttpClient {
         this.register(Callback.identity(), null, null);
     }
 
-    public <T> void register(Callback<T> callback) {
-        this.register(callback, null, null);
+    public void register(Integer code, ErrorCallback error) {
+        this.register(Callback.identity(), code, error);
     }
 
-    public <T> void register(Integer code, ErrorCallback error) {
-        this.register(Callback.identity(), code, error);
+    public <T> void register(Callback<T> callback) {
+        this.register(callback, null, null);
     }
 
     public <T> void register(Callback<T> success, Integer code, ErrorCallback error) {
