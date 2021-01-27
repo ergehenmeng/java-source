@@ -6,8 +6,14 @@ package com.eghm.callback;
  */
 public class Wrapper {
 
+    /**
+     * 响应code码
+     */
     private Integer code;
 
+    /**
+     * 详细信息
+     */
     private String msg;
 
     public Integer getCode() {
