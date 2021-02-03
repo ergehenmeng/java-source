@@ -78,6 +78,22 @@
             <artifactId>hutool-all</artifactId>
             <version>5.2.3</version>
         </dependency>
+        <!--视频中提取图片-->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacv</artifactId>
+            <version>1.5.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacpp</artifactId>
+            <version>1.5.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>ffmpeg-platform</artifactId>
+            <version>4.2.2-1.5.3</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
