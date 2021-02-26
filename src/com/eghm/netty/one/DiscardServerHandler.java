@@ -15,6 +15,12 @@ import java.nio.charset.Charset;
  */
 public class DiscardServerHandler extends ChannelInboundHandlerAdapter {
 
+
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        System.out.println("链接进来了....");
+    }
+
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ByteBuf buf = ctx.alloc().buffer();
