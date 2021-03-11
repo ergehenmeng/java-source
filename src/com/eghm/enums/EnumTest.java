@@ -17,5 +17,6 @@ public class EnumTest {
 		//空set
 		enumSet = EnumSet.noneOf(Channel.class);
 		System.out.println(enumSet);
-	}
+
+    }
 }
