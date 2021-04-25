@@ -27,11 +27,11 @@ public class 第五题_栈排序 {
 		Stack<Integer> help = new Stack<>();
 		while (!stack.isEmpty()) {
 			Integer pop = stack.pop();
-			// 大值放在stack 小的放在help中
+			// 对比, 大值放在stack(正序) 小的放在help中
 			while (!help.isEmpty() && help.peek() > pop) {
 				stack.push(help.pop());
 			}
-			// 同时将弹出的元素
+			// 尽可能将小的元素入栈
 			help.push(pop);
 		}
 		// 倒叙
