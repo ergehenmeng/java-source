@@ -21,7 +21,7 @@ public class 反转链表 {
         while (head != null) {
             // 保存要反转到头来的那个节点
             next = head.next;
-            // 要反转的那个节点指向已经反转的上一个节点
+            // 要反转的那个节点指向已经反转的上一个节点 就是把head.next节点中断了
             head.next = pre;
             // 上一个已经反转到头部的节点
             pre = head;

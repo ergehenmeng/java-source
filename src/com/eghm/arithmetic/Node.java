@@ -32,9 +32,11 @@ public class Node {
 
     public static void println(Node node) {
         while (node != null) {
-            System.out.println(node.val);
+            System.out.print(node.val);
+            System.out.print("-");
             node = node.next;
         }
+        System.out.println("");
     }
 
     public static void main(String[] args) {
