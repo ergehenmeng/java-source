@@ -31,6 +31,8 @@ public class CompletableFutureTest {
         }), (aLong, aLong2) -> {
             System.out.println("aLong, aLong2 " + aLong + " " + aLong2);
             return aLong + " " +  aLong2;
+        }).whenComplete((s, throwable) -> {
+            System.out.println("结束: " + s);
         });
 
         String time = future.get();

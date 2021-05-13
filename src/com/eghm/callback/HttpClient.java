@@ -28,34 +28,27 @@ public class HttpClient {
     private static final int SUCCESS = 200;
 
     public void register() {
-        this.register(Callback.identity(), null, null);
+        this.register(Callback.identity(), ErrorCallback.identity());
     }
 
-    public void register(Integer code, ErrorCallback error) {
-        this.register(Callback.identity(), code, error);
+    public void register(ErrorCallback error) {
+        this.register(Callback.identity(), error);
     }
 
     public <T> void register(Callback<T> callback) {
-        this.register(callback, null, null);
+        this.register(callback, ErrorCallback.identity());
     }
 
-    public <T> void register(Callback<T> success, Integer code, ErrorCallback error) {
+
+    public <T> void register(Callback<T> success, ErrorCallback error) {
         RespWrapper<T> wrapper = gson.fromJson(response, new ParameterizedTypeImpl(RespWrapper.class, new Type[]{this.getGenericType(success.getClass())}));
         // 成功
         if (wrapper.getCode() == SUCCESS) {
             success.onData(wrapper.getData());
             return;
         }
-        // 自定义错误
-        if (wrapper.getCode().equals(code) && error != null) {
-            error.accept(wrapper);
-            return;
-        }
-        // 通用错误
-        System.out.println(wrapper.getMsg());
+        error.accept(wrapper);
     }
-
-
 
     /**
      * 解析泛型参数
@@ -77,6 +70,6 @@ public class HttpClient {
             public void onData(School data) {
                 System.out.println(data);
             }
-        }, 100, data -> System.out.println(data.getMsg()));
+        }, data -> System.out.println(data.getMsg()));
     }
 }
